@@ -1,0 +1,14 @@
+!c----------------------------------------------------------------------c
+!c-----------------------c
+!c       table.v_gd7       c
+!c-----------------------c
+        parameter(nj7=514,nk7=66)
+        parameter(eps17=1.0d-15,eps27=1.0d-10,eps37=1.0d-01,eps47=5.0d-01)
+        common/csi7/j17,k17,m17,n17,jb7,je7,kb7,ke7
+        common/cff7/v_ff7(nj7,nk7)
+        common/ccf7/v_aiw7(nj7,nk7),v_ajs7(nj7,nk7),v_akb7(nj7,nk7),v_aie7(nj7,nk7),v_ajn7(nj7,nk7),v_akt7(nj7,nk7), &
+                    v_app7(nj7,nk7),v_bpp7(nj7,nk7),v_res7(nj7,nk7)
+!c------------------------------c
+!c       end of table.v_gd7       c
+!c------------------------------c
+!c----------------------------------------------------------------------c

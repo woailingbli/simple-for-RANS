@@ -1,0 +1,14 @@
+!c----------------------------------------------------------------------c
+!c-----------------------c
+!c       table.v_gd5       c
+!c-----------------------c
+        parameter(nj5=514,nk5=18)
+        parameter(eps15=1.0d-15,eps25=1.0d-15,eps35=1.0d-01,eps45=5.0d-01)
+        common/csi5/j15,k15,m15,n15,jb5,je5,kb5,ke5
+        common/cff5/v_ff5(nj5,nk5)
+        common/ccf5/v_aiw5(nj5,nk5),v_ajs5(nj5,nk5),v_akb5(nj5,nk5),v_aie5(nj5,nk5),v_ajn5(nj5,nk5),v_akt5(nj5,nk5), &
+                    v_app5(nj5,nk5),v_bpp5(nj5,nk5),v_res5(nj5,nk5)
+!c-------------------------------c
+!c       end of table.v_gd5       c
+!c-------------------------------c
+!c----------------------------------------------------------------------c

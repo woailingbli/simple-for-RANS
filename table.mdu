@@ -1,0 +1,15 @@
+!c----------------------------------------------------------------------c
+        module varalc
+        implicit double precision (a-h,o-z)
+        allocatable::pre1(:,:),pre2(:,:),pre0(:,:)
+        allocatable::aiw1(:,:),ajs1(:,:),akb1(:,:),aie1(:,:),ajn1(:,:),akt1(:,:),apc1(:,:),bpp1(:,:),res1(:,:)
+        allocatable::aiw2(:,:),ajs2(:,:),akb2(:,:),aie2(:,:),ajn2(:,:),akt2(:,:),apc2(:,:),bpp2(:,:),res2(:,:)
+        allocatable::aiw3(:,:),ajs3(:,:),akb3(:,:),aie3(:,:),ajn3(:,:),akt3(:,:),apc3(:,:),bpp3(:,:),res3(:,:),res4(:,:)
+        allocatable::uu1(:,:),vv1(:,:),ww1(:,:),vv0(:,:),ww0(:,:),vv2(:,:),ww2(:,:)
+        allocatable::ui1(:,:),vi1(:,:),wi1(:,:),pi1(:,:)
+        allocatable::vpvp1(:,:),vpwp1(:,:),wpwp1(:,:)
+        allocatable::hu0(:,:),hv0(:,:),hw0(:,:)
+        allocatable::cfl(:,:)
+        allocatable::resume_initial(:)
+        end module varalc
+!c----------------------------------------------------------------------c

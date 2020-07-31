@@ -1,0 +1,199 @@
+
+#
+# Absoft Developer Tools Interface requires use of this makefile.
+#
+.SHELL: name="cmd.exe"
+MKDIR=if not exist "$(OBJDIR)" mkdir 
+RMDIR=rmdir /S /Q
+
+#
+# Variables for the compiler(s) and linker
+#
+ABSOFT_F95=f95 
+ABSOFT_F77=f95
+VAST_PREPROCESSOR=vastfp.exe
+RC=rc.exe
+CL=cl.exe /NOLOGO
+MAKE=amake2
+ABSOFT_F95_LINKER=f95
+DUMMY=
+
+#
+# Flags
+#
+ABSOFT_F95_FLAGS=  -g -m32 -stack:32768000
+ABSOFT_F77_FLAGS=  -f77_compat -g -m32 -stack:32768000
+RC_FLAGS=
+CL_FLAGS= -Zi
+MAKE_FLAGS= -k
+ABSOFT_F95_LINKER_FLAGS=-IPA:debug=on -IPA:source_pu_order=on           -stack:32768000 -m32 -g
+
+#
+# Name of the executable
+#
+TARGET=project.exe
+OUTDIR=.
+OBJDIR=.\Debug
+
+#
+# Files for this executable
+#
+VAST_PREPROCESSOR_FILES=
+ABSOFT_F95_FILES="finitia.f95" "fipadop.f95" "freynold.f95" "fsolves.f95" "fsupply.f95" "fwgrid.f95" "famain.f95" "fboundy.f95" "fcontro.f95" "fequatp.f95" "fequatv.f95" "fequatw.f95" "fvgrid.f95"
+ABSOFT_F77_FILES=
+CL_FILES=
+ABSOFT_F95_LINKER_FILES=
+RC_FILES=
+MAKE_FILES=
+
+#
+# Rules and dependencies for the executable
+#
+SRCFILES=$(ABSOFT_F95_FILES)
+OBJFILES="$(OBJDIR)\finitia.obj" "$(OBJDIR)\fipadop.obj" "$(OBJDIR)\freynold.obj" "$(OBJDIR)\fsolves.obj" "$(OBJDIR)\fsupply.obj" "$(OBJDIR)\fwgrid.obj" "$(OBJDIR)\famain.obj" "$(OBJDIR)\fboundy.obj" "$(OBJDIR)\fcontro.obj" "$(OBJDIR)\fequatp.obj" "$(OBJDIR)\fequatv.obj" "$(OBJDIR)\fequatw.obj" "$(OBJDIR)\fvgrid.obj"
+all: "$(OBJDIR)" "$(OUTDIR)\$(TARGET)"
+	
+
+"$(OUTDIR)\$(TARGET)":  $(OBJFILES) $(ABSOFT_F95_LINKER_FILES) $(MODFILES) $(RC_FILES)
+	$(ABSOFT_F95_LINKER)  $(LPATHS) $(OBJFILES) $(ABSOFT_F95_LINKER_FILES) $(LIBS) -o "$(OUTDIR)\$(TARGET)" $(ABSOFT_F95_LINKER_FLAGS)
+
+
+
+"$(OBJDIR)\finitia.obj": "finitia.f95"
+	$(ABSOFT_F95) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F95_FLAGS) -o "$(OBJDIR)\finitia.obj" "finitia.f95"
+
+"$(OBJDIR)\fipadop.obj": "fipadop.f95"
+	$(ABSOFT_F95) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F95_FLAGS) -o "$(OBJDIR)\fipadop.obj" "fipadop.f95"
+
+"$(OBJDIR)\freynold.obj": "freynold.f95"
+	$(ABSOFT_F95) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F95_FLAGS) -o "$(OBJDIR)\freynold.obj" "freynold.f95"
+
+"$(OBJDIR)\fsolves.obj": "fsolves.f95"
+	$(ABSOFT_F95) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F95_FLAGS) -o "$(OBJDIR)\fsolves.obj" "fsolves.f95"
+
+"$(OBJDIR)\fsupply.obj": "fsupply.f95"
+	$(ABSOFT_F95) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F95_FLAGS) -o "$(OBJDIR)\fsupply.obj" "fsupply.f95"
+
+"$(OBJDIR)\fwgrid.obj": "fwgrid.f95"
+	$(ABSOFT_F95) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F95_FLAGS) -o "$(OBJDIR)\fwgrid.obj" "fwgrid.f95"
+
+"$(OBJDIR)\famain.obj": "famain.f95"
+	$(ABSOFT_F95) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F95_FLAGS) -o "$(OBJDIR)\famain.obj" "famain.f95"
+
+"$(OBJDIR)\fboundy.obj": "fboundy.f95"
+	$(ABSOFT_F95) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F95_FLAGS) -o "$(OBJDIR)\fboundy.obj" "fboundy.f95"
+
+"$(OBJDIR)\fcontro.obj": "fcontro.f95"
+	$(ABSOFT_F95) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F95_FLAGS) -o "$(OBJDIR)\fcontro.obj" "fcontro.f95"
+
+"$(OBJDIR)\fequatp.obj": "fequatp.f95"
+	$(ABSOFT_F95) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F95_FLAGS) -o "$(OBJDIR)\fequatp.obj" "fequatp.f95"
+
+"$(OBJDIR)\fequatv.obj": "fequatv.f95"
+	$(ABSOFT_F95) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F95_FLAGS) -o "$(OBJDIR)\fequatv.obj" "fequatv.f95"
+
+"$(OBJDIR)\fequatw.obj": "fequatw.f95"
+	$(ABSOFT_F95) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F95_FLAGS) -o "$(OBJDIR)\fequatw.obj" "fequatw.f95"
+
+"$(OBJDIR)\fvgrid.obj": "fvgrid.f95"
+	$(ABSOFT_F95) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F95_FLAGS) -o "$(OBJDIR)\fvgrid.obj" "fvgrid.f95"
+
+"$(OBJDIR)":
+	$(MKDIR) "$(OBJDIR)"
+#
+# Clean Rules
+#
+clean:
+	 if exist "$(OBJDIR)" $(RMDIR) "$(OBJDIR)" 
+	 if exist "$(TARGET)" erase "$(TARGET)"
+
+#
+# Define necessary macros for dependency scanning.
+#
+MKDEP=amakedepend
+MKDEP_FLAGS= -quiet "-pre$(OBJDIR)\"\" -Y -modInfo -errdel -f90 -f makefile.amake
+#
+# Generate dependencies for the project
+#
+ScanAll: "$(OUTDIR)" "$(OBJDIR)" MakeDepsAll
+
+#
+# Scan for all F77, F95, and c/c++ dependencies
+#
+MakeDepsAll:
+	$(MKDEP) -quiet "-pre.\Debug\\" -Y -modInfo -errdel -f90 -f makefile.amake -a -info   -g -m32 -stack:32768000 -info "finitia.f95" "fipadop.f95" "freynold.f95" "fsolves.f95" "fsupply.f95" "fwgrid.f95" "famain.f95" "fboundy.f95" "fcontro.f95" "fequatp.f95" "fequatv.f95" "fequatw.f95" "fvgrid.f95" 
+# DO NOT DELETE THIS LINE - makedepend depends upon it.
+
+
+
+
+
+
+
+".\Debug\famain.obj"&: ".\Debug\varalc.mod"
+
+
+
+
+
+
+
+# Defined Module: .\Debug\varalc.mod
+".\Debug\finitia.obj": ".\Debug\varalc.mod" "table.prc" "table.cre"
+".\Debug\finitia.obj": "table.gd1" "table.lei" "table.prc" "table.cre"
+".\Debug\finitia.obj": "table.gd1" "table.lei" "table.prc" "table.cre"
+".\Debug\finitia.obj": "table.gd1"
+
+".\Debug\fipadop.obj": "table.prc" "table.v_cre" "table.v_gd1" "table.v_gd2"
+".\Debug\fipadop.obj": "table.v_gd3" "table.v_gd4" "table.v_gd5"
+".\Debug\fipadop.obj": "table.v_gd6" "table.v_gd7" "table.v_gd8"
+".\Debug\fipadop.obj": "table.v_gd9" "table.prc" "table.w_cre" "table.w_gd1"
+".\Debug\fipadop.obj": "table.w_gd2" "table.w_gd3" "table.w_gd4"
+".\Debug\fipadop.obj": "table.w_gd5" "table.w_gd6" "table.w_gd7"
+".\Debug\fipadop.obj": "table.w_gd8" "table.prc" "table.cre" "table.gd1"
+".\Debug\fipadop.obj": ".\Debug\varalc.mod" "table.prc" "table.cre"
+".\Debug\fipadop.obj": "table.gd1" "table.alc" "table.prc" "table.cre"
+".\Debug\fipadop.obj": "table.gd1" "table.lei"
+
+".\Debug\freynold.obj": "table.prc" "table.cre" "table.lei"
+
+".\Debug\fsolves.obj": "table.prc" "table.dmw" "table.prc" "table.dmw"
+".\Debug\fsolves.obj": "table.prc" "table.gd2" "table.prc" "table.gd3"
+".\Debug\fsolves.obj": "table.prc" "table.gd4" "table.prc" "table.gd5"
+".\Debug\fsolves.obj": "table.prc" "table.gd6" "table.prc" "table.gd7"
+".\Debug\fsolves.obj": "table.prc" "table.gd8" "table.prc" "table.prc"
+".\Debug\fsolves.obj": "table.prc" "table.prc" "table.dmw" "table.prc"
+".\Debug\fsolves.obj": "table.dmw" "table.prc" "table.dmw" "table.prc"
+".\Debug\fsolves.obj": "table.dmw" "table.prc" "table.prc"
+
+".\Debug\fsupply.obj": "table.prc" "table.cre" "table.gd1" "table.prc"
+".\Debug\fsupply.obj": ".\Debug\varalc.mod" "table.prc" "table.cre"
+".\Debug\fsupply.obj": "table.gd1" "table.prc" "table.cre" "table.gd1"
+
+".\Debug\fwgrid.obj": "table.prc" "table.dmw" "table.prc" "table.dmw"
+".\Debug\fwgrid.obj": "table.prc" "table.w_gd2" "table.prc" "table.w_gd3"
+".\Debug\fwgrid.obj": "table.prc" "table.w_gd4" "table.prc" "table.w_gd5"
+".\Debug\fwgrid.obj": "table.prc" "table.w_gd6" "table.prc" "table.w_gd7"
+".\Debug\fwgrid.obj": "table.prc" "table.w_gd8" "table.prc" "table.prc"
+
+".\Debug\famain.obj": "table.mdu" "table.prc"
+
+".\Debug\fboundy.obj": "table.prc" "table.prc" "table.prc" "table.prc"
+
+".\Debug\fcontro.obj": "table.prc" "table.cre"
+
+".\Debug\fequatp.obj": ".\Debug\varalc.mod" "table.prc" "table.cre"
+".\Debug\fequatp.obj": "table.gd1"
+
+".\Debug\fequatv.obj": ".\Debug\varalc.mod" "table.prc" "table.cre"
+".\Debug\fequatv.obj": "table.v_gd11" "table.lei"
+
+".\Debug\fequatw.obj": ".\Debug\varalc.mod" "table.prc" "table.cre"
+".\Debug\fequatw.obj": "table.gd1" "table.lei"
+
+".\Debug\fvgrid.obj": "table.prc" "table.dmw" "table.prc" "table.dmw"
+".\Debug\fvgrid.obj": "table.prc" "table.dmw" "table.prc" "table.v_gd2"
+".\Debug\fvgrid.obj": "table.prc" "table.v_gd3" "table.prc" "table.v_gd4"
+".\Debug\fvgrid.obj": "table.prc" "table.v_gd5" "table.prc" "table.v_gd6"
+".\Debug\fvgrid.obj": "table.prc" "table.v_gd7" "table.prc" "table.v_gd8"
+".\Debug\fvgrid.obj": "table.prc" "table.v_gd9" "table.prc" "table.prc"

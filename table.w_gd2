@@ -1,0 +1,14 @@
+!c----------------------------------------------------------------------c
+!c-----------------------c
+!c      table.gd2        c
+!c-----------------------c
+        parameter(nj2=6,nk2=514)
+        parameter(eps12=1.0d-15,eps22=1.0d-15,eps32=1.0d-01,eps42=5.0d-01)
+        common/csi2/j12,k12,m12,n12,jb2,je2,kb2,ke2
+        common/cff2/w_ff2(nj2,nk2)
+        common/ccf2/w_aiw2(nj2,nk2),w_ajs2(nj2,nk2),w_akb2(nj2,nk2),w_aie2(nj2,nk2),w_ajn2(nj2,nk2),w_akt2(nj2,nk2), &
+                    w_app2(nj2,nk2),w_bpp2(nj2,nk2),w_res2(nj2,nk2)
+!c------------------------------c
+!c       end of table.gd2       c
+!c------------------------------c
+!c----------------------------------------------------------------------c
