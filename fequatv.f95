@@ -28,22 +28,23 @@
                         alpha_w_minus2 = min(0.0d-01 , (5.0d-01 * (wi1(j-1,k) + wi1(j,k))))!j+0.5,k-0.5,-                        
 
                         
-                        Fe = dzm1(k-1)*(vi1(j+1,k)+vi1(j,k))/2
-                        Fw = dzm1(k-1)*(vi1(j-1,k)+vi1(j,k))/2
-                        Ft = dyv1(j+1)*(wi1(j,k)+wi1(j+1,k))/2
-                        Fb = dyv1(j+1)*(wi1(j,k-1)+wi1(j+1,k-1))/2
+                        Fn = dzm1(k)*(vi1(j+1,k)+vi1(j,k))/2
+                        Fs = dzm1(k)*(vi1(j-1,k)+vi1(j,k))/2
+                        Ft = dyv1(j)*(wi1(j,k)+wi1(j+1,k))/2
+                        Fb = dyv1(j)*(wi1(j,k-1)+wi1(j+1,k-1))/2
                         
-                        De = dzm1(k-1)/(reno*dym1(j))
-                        Dw = dzm1(k-1)/(reno*dym1(j-1))
-                        Dt = dyv1(j+1)/(reno*dzw1(k+1))
-                        Db = dyv1(j+1)/(reno*dzw1(k))
-                        ajs1(j,k)=dzm1(k) * (alpha_v_plus1 + 1/(reno*dym1(j-1))) !!!!!!!!!!!!
-                        ajn1(j,k)=dzm1(k)* (-alpha_v_minus2 + 1/(reno*dym1(j)))!!!!!!!!!
-                        akb1(j,k)=dyv1(j) * (alpha_w_plus2 + 1/(reno*dzw1(k)))
-                        akt1(j,k)=dyv1(j) * (-alpha_w_minus1 + 1/(reno*dzw1(k+1)))
-                         
-                        apc1(j,k)=dzm1(k) * (alpha_v_plus2 + 1/(reno*dym1(j)) - alpha_v_minus1 + 1/(reno*dym1(j-1)))
-                        apc1(j,k)=apc1(j,k)+dyv1(j)*(alpha_w_plus1+1/(reno*dzw1(k+1))-alpha_w_minus2+1/(reno*dzw1(k)))
+                        Dn = dzm1(k)/(reno*dym1(j))
+                        Ds = dzm1(k)/(reno*dym1(j-1))
+                        Dt = dyv1(j)/(reno*dzw1(k+1))
+                        Db = dyv1(j)/(reno*dzw1(k))
+                        
+                        ajs1(j,k) = Ds + max(0.0d-01 , Fs)
+                        ajn1(j,k) = Dn + max(0.0d-01 , -Fn)
+                        akb1(j,k) = Db + max(0.0d-01 , Fb)
+                        akt1(j,k) = Dt + max(0.0d-01 , -Ft)
+                        deltaF = Fn - Fs + Ft - Fb
+                      
+                        apc1(j,k) = ajs1(j,k) + ajn1(j,k) + akb1(j,k) + akt1(j,k) + deltaF
                         
                         vpwpn = (vpwp(j-1,k+1)+vpwp(j,k+1))*fz21(k+1)*0.5 + (vpwp(j-1,k)+vpwp(j,k))*fz11(k+1)*0.5
                         vpwps = (vpwp(j-1,k)+vpwp(j,k))*fz21(k)*0.5 + (vpwp(j-1,k-1)+vpwp(j,k-1))*fz11(k)*0.5

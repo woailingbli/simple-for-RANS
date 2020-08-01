@@ -258,17 +258,17 @@
 !        write(*,11) ressum0
 11      format(' *','  l-1   ','initial residual ressum=',1pe10.3,8x,'*')
 !c--------------------------------c
-        call v_solve01(j1,k1,m1,n1,jb,je,kb,ke,ni,nj,nk,mode1,eps1,eps2,eps3,eps4,ressum,ff,res,app,bpp,aiw,aie,ajs,ajn,akb,akt)
+        call v_solve0(j1,k1,m1,n1,jb,je,kb,ke,ni,nj,nk,mode1,eps1,eps2,eps3,eps4,ressum,ff,res,app,bpp,aiw,aie,ajs,ajn,akb,akt)
 !        write(*,12) ressum
 12      format(' *','  l-1   ','postLBL residual ressum=',1pe10.3,8x,'*')
         mode=1
 !c mode=1: control residual precision
         if(mode.eq.1) then
         if(ressum.le.eps2) then
-        write(*,201)
+!        write(*,201)
         goto 1000
         else
-        write(*,202)
+!        write(*,202)
         goto 200
         end if
         end if
@@ -276,15 +276,15 @@
 !c mode=2: control residual decreasing level
         if(mode.eq.2) then
         if(ressum.le.eps2) then
-!        write(*,201)
+!c        write(*,201)
         goto 1000
         end if
         declev=ressum/ressum0
         if(declev.gt.eps3) then
-!        write(*,203)
+!c        write(*,203)
         goto 200
         else
-!        write(*,204)
+!c        write(*,204)
         goto 1000
         end if
         end if
@@ -335,7 +335,7 @@
         ff(j,3)=ff(j,3)+v_ff0(j,2)
         enddo
         
-        goto 100
+        goto 1000
 201     format(' *        total residual satisfied,   return        *')
 202     format(' *        residual not satisfied, continuing        *')
 203     format(' *        declev not reached,decrat exceeded        *')
@@ -508,10 +508,10 @@
 !c mode=1: control residual precision
         if(mode.eq.1) then
         if(ressum.le.eps2) then
- !       write(*,201)
+        write(*,201)
         goto 1000
         else
-  !      write(*,202)
+        write(*,202)
         goto 200
         end if
         end if
@@ -519,15 +519,15 @@
 !c mode=2: control residual decreasing level
         if(mode.eq.2) then
         if(ressum.le.eps2) then
-   !     write(*,201)
+!        write(*,201)
         goto 1000
         end if
         declev=ressum/ressum0
         if(declev.gt.eps3) then
-    !    write(*,203)
+!        write(*,203)
         goto 200
         else
-     !   write(*,204)
+!        write(*,204)
         goto 1000
         end if
         end if
@@ -781,11 +781,11 @@
         mode1=3
         mode2=2
         call residup(j2,k2,m2,n2,jb,je,kb,ke,nj,nk,ressum0,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt,res)
-!       write(*,11) ressum0
+        write(*,11) ressum0
 11      format(' *','  l-7   ','initial residual ressum=',1pe10.3,8x,'*')
 !c--------------------------------c
 100     call v_solve0(j1,k1,m1,n1,jb,je,kb,ke,ni,nj,nk,mode1,eps1,eps2,eps3,eps4,ressum,ff,res,app,bpp,aiw,aie,ajs,ajn,akb,akt)
-!        write(*,12) ressum
+        write(*,12) ressum
 12      format(' *','  l-7   ','postLBL residual ressum=',1pe10.3,8x,'*')
 
 !c mode=1: control residual precision
@@ -802,15 +802,15 @@
 !c mode=2: control residual decreasing level
         if(mode.eq.2) then
         if(ressum.le.eps2) then
-!        write(*,201)
+        write(*,201)
         goto 1000
         end if
         declev=ressum/ressum0
         if(declev.gt.eps3) then
-!        write(*,203)
+        write(*,203)
         goto 200
         else
-!        write(*,204)
+        write(*,204)
         goto 1000
         end if
         end if
@@ -852,11 +852,11 @@
         mode1=3
         mode2=2
         call residup(j2,k2,m2,n2,jb,je,kb,ke,nj,nk,ressum0,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt,res)
-!       write(*,11) ressum0
+       write(*,11) ressum0
 11      format(' *','  l-8   ','initial residual ressum=',1pe10.3,8x,'*')
 !c--------------------------------c
 100     call v_solve0(j1,k1,m1,n1,jb,je,kb,ke,ni,nj,nk,mode1,eps1,eps2,eps3,eps4,ressum,ff,res,app,bpp,aiw,aie,ajs,ajn,akb,akt)
-!        write(*,12) ressum
+        write(*,12) ressum
 12      format(' *','  l-8   ','postLBL residual ressum=',1pe10.3,8x,'*')
 
 !c mode=1: control residual precision
@@ -873,15 +873,15 @@
 !c mode=2: control residual decreasing level
         if(mode.eq.2) then
         if(ressum.le.eps2) then
-!        write(*,201)
+        write(*,201)
         goto 1000
         end if
         declev=ressum/ressum0
         if(declev.gt.eps3) then
-!        write(*,203)
+        write(*,203)
         goto 200
         else
-!        write(*,204)
+        write(*,204)
         goto 1000
         end if
         end if
@@ -945,15 +945,15 @@
 !c mode=2: control residual decreasing level
         if(mode.eq.2) then
         if(ressum.le.eps2) then
-!        write(*,201)
+        write(*,201)
         goto 1000
         end if
         declev=ressum/ressum0
         if(declev.gt.eps3) then
-!        write(*,203)
+        write(*,203)
         goto 200
         else
-!        write(*,204)
+        write(*,204)
         goto 1000
         end if
         end if
