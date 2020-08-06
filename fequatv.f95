@@ -7,6 +7,9 @@
         include 'table.v_gd11'
         include 'table.lei'
 
+        dimension Fn(nj1,nk1),Fs(nj1,nk1),Ft(nj1,nk1),Fb(nj1,nk1),vpwpt(nj1,nk1),vpwpb(nj1,nk1)
+        dimension Dn(nj1,nk1),Ds(nj1,nk1),Dt(nj1,nk1),Db(nj1,nk1),deltaF(nj1,nk1),deltaA(nj1,nk1)
+
 !c-------------------------------c
         j11=2;k11=1
         j21=j11+1;k21=k11+1
@@ -16,42 +19,33 @@
 
         do j=j21,m21
             do k=k21,n21
-                if((j.ge.jb1.and.j.le.je1).and.(k.ge.kb1.and.k.lt.ke1)) cycle
-                        alpha_v_plus1 = max(0.0d-01 , (5.0d-01 * (vi1(j-1,k) + vi1(j,k))))!j,k,+
-                        alpha_v_minus1 = min(0.0d-01 , (5.0d-01 * (vi1(j-1,k) + vi1(j,k))))!j,k,-
-                        alpha_w_plus1 = max(0.0d-01 , (5.0d-01 * (wi1(j-1,k+1) + wi1(j,k+1))))!j+0.5,k+0.5,+
-                        alpha_w_minus1 = min(0.0d-01 , (5.0d-01 * (wi1(j-1,k+1) + wi1(j,k+1))))!j+0.5,k+0.5,-
-
-                        alpha_v_plus2 = max(0.0d-01 , (5.0d-01 * (vi1(j,k) + vi1(j+1,k))))!j+1,k,+
-                        alpha_v_minus2 = min(0.0d-01 , (5.0d-01 * (vi1(j,k) + vi1(j+1,k))))!j+1,k,-
-                        alpha_w_plus2 = max(0.0d-01 , (5.0d-01 * (wi1(j-1,k) + wi1(j,k))))!j+0.5,k-0.5,+
-                        alpha_w_minus2 = min(0.0d-01 , (5.0d-01 * (wi1(j-1,k) + wi1(j,k))))!j+0.5,k-0.5,-                        
-
+                if((j.ge.jb1.and.j.lt.je1).and.(k.ge.kb1.and.k.lt.ke1)) cycle
+                       
+                        Fn(j,k) = dzm1(k)*(vi1(j+1,k)+vi1(j,k))/2
+                        Fs(j,k) = dzm1(k)*(vi1(j-1,k)+vi1(j,k))/2
+                        Ft(j,k) = dyv1(j)*(wi1(j,k+1)+wi1(j-1,k+1))/2
+                        Fb(j,k) = dyv1(j)*(wi1(j,k)+wi1(j-1,k))/2
                         
-                        Fn = dzm1(k)*(vi1(j+1,k)+vi1(j,k))/2
-                        Fs = dzm1(k)*(vi1(j-1,k)+vi1(j,k))/2
-                        Ft = dyv1(j)*(wi1(j,k)+wi1(j+1,k))/2
-                        Fb = dyv1(j)*(wi1(j,k-1)+wi1(j+1,k-1))/2
+                        Dn(j,k) = dzm1(k)/(reno*dym1(j))
+                        Ds(j,k) = dzm1(k)/(reno*dym1(j-1))
+                        Dt(j,k) = dyv1(j)/(reno*dzw1(k+1))
+                        Db(j,k) = dyv1(j)/(reno*dzw1(k))
                         
-                        Dn = dzm1(k)/(reno*dym1(j))
-                        Ds = dzm1(k)/(reno*dym1(j-1))
-                        Dt = dyv1(j)/(reno*dzw1(k+1))
-                        Db = dyv1(j)/(reno*dzw1(k))
-                        
-                        ajs1(j,k) = Ds + max(0.0d-01 , Fs)
-                        ajn1(j,k) = Dn + max(0.0d-01 , -Fn)
-                        akb1(j,k) = Db + max(0.0d-01 , Fb)
-                        akt1(j,k) = Dt + max(0.0d-01 , -Ft)
-                        deltaF = Fn - Fs + Ft - Fb
+                        ajs1(j,k) = Ds(j,k) + max(0.0d-01 , Fs(j,k))
+                        ajn1(j,k) = Dn(j,k) + max(0.0d-01 , -Fn(j,k))
+                        akb1(j,k) = Db(j,k) + max(0.0d-01 , Fb(j,k))
+                        akt1(j,k) = Dt(j,k) + max(0.0d-01 , -Ft(j,k))
+                        deltaF(j,k) = Fn(j,k) - Fs(j,k) + Ft(j,k) - Fb(j,k)
                       
-                        apc1(j,k) = ajs1(j,k) + ajn1(j,k) + akb1(j,k) + akt1(j,k) + deltaF
+                        apc1(j,k) = ajs1(j,k) + ajn1(j,k) + akb1(j,k) + akt1(j,k)
                         
-                        vpwpn = (vpwp(j-1,k+1)+vpwp(j,k+1))*fz21(k+1)*0.5 + (vpwp(j-1,k)+vpwp(j,k))*fz11(k+1)*0.5
-                        vpwps = (vpwp(j-1,k)+vpwp(j,k))*fz21(k)*0.5 + (vpwp(j-1,k-1)+vpwp(j,k-1))*fz11(k)*0.5
+                        deltaA(j,k) = (ajs1(j,k)+ajn1(j,k)+akb1(j,k)+akt1(j,k))-apc1(j,k)
+                        vpwpt(j,k) = (vpwp(j-1,k+1)+vpwp(j,k+1))*fz21(k+1)*0.5 + (vpwp(j-1,k)+vpwp(j,k))*fz11(k+1)*0.5
+                        vpwpb(j,k) = (vpwp(j-1,k)+vpwp(j,k))*fz21(k)*0.5 + (vpwp(j-1,k-1)+vpwp(j,k-1))*fz11(k)*0.5
                         aiw1(j,k)=0
                         aie1(j,k)=0
                         bpp1(j,k) = - (pre1(j,k)-pre1(j-1,k)) * dzm1(k)  
-                        bpp1(j,k) = bpp1(j,k) - (vpvp(j,k) - vpvp(j-1,k)) * dzm1(k) - (vpwpn - vpwps) * dyv1(j)
+                        bpp1(j,k) = bpp1(j,k) - (vpvp(j,k) - vpvp(j-1,k)) * dzm1(k) - (vpwpt(j,k) - vpwpb(j,k)) * dyv1(j)
             enddo
         enddo
 !!!c-------------------------------c
@@ -97,16 +91,17 @@
                         vv1,res1,apc1,bpp1,aiw1,aie1,ajs1,ajn1,akb1,akt1)
         end if
 
-!!c--------------------------------c
-
-!!c--------------------------------c
-!        call residum(j21,k21,m21,n21,jb1,je1,kb1,ke1+1,ni1,nj1,nk1,ressum0,vv1,apc1,bpp1,aiw1,ajs1,akb1,aie1,ajn1,akt1,res1)
+1000    return
+!        call residum(j21,k21,m21,n21,jb1,je1+1,kb1,ke1,ni1,nj1,nk1,ressum0,vv1,apc1,bpp1,aiw1,aie1,ajs1,ajn1,akb1,akt1,res1)
 !        ressum1=ressum0
 !        write(*,200) ressum0
 !        iter=0
 !        mode=2
+!!c--------------------------------c
 !100     iter=iter+1
-
+!!c--------------------------------c
+!
+!!c--------------------------------c
 !        do k=k21,n21
 !            if(k.ge.kb1.and.k.lt.ke1) then
 !                call trdgmj(j11,jb1,k,nj1,nk1,vv1,apc1,bpp1,aiw1,aie1,ajs1,ajn1,akb1,akt1)
@@ -188,6 +183,6 @@
 !206     format(' *        declev satisfied,  go out of L-B-L        *')
 !207     format(' *        decrat small, go on next iteration        *')
 !208     format(' *        decrat large, stop the LBL process        *')
-
-1000    return
+!
+!1000    return
         end

@@ -12,11 +12,6 @@
         
 !c-------------------------------c
 !        do k=k2,n2
-!            j=j2
-!            app(j,k)=app(j,k)+ajm(j,k)
-!            con(j,k)=con(j,k)-ajm(j,k)*vv1(j,k)
-!            ajm(j,k)=0.0d+00
-!            j=m2
 !            app(j,k)=app(j,k)+ajp(j,k)
 !            con(j,k)=con(j,k)-ajp(j,k)*vv1(j,k)
 !            ajp(j,k)=0.0d+00
@@ -34,18 +29,24 @@
         enddo
 !c-------------------------------c 
 !        do k=kb,ke-1
-!            j=je+1
-!            app(j,k)=app(j,k)+ajm(j,k)
-!!            con(j,k)=con(j,k)-ajm(j,k)*vv1(j,k)
-!            ajm(j,k)=0.0d+00
-!            j=jb-1
-!            app(j,k)=app(j,k)+ajp(j,k)
-!!            con(j,k)=con(j,k)-ajp(j,k)*vv1(j,k)
-!            ajp(j,k)=0.0d+00
+!            do j=jb,je
+!                    app(j,k)=1.0
+!            enddo
+!        enddo
+!        do k=kb,ke-1
+!            j=jb
+!            app(j,k)=1.0
+!            j=je
+!            app(j,k)=1.0
 !        enddo
 !c-------------------------------c
         do j=jb,je
             k=ke
+!            j=j2
+!            app(j,k)=app(j,k)+ajm(j,k)
+!            con(j,k)=con(j,k)-ajm(j,k)*vv1(j,k)
+!            ajm(j,k)=0.0d+00
+!            j=m2
             app(j,k)=app(j,k)+akm(j,k)
             con(j,k)=con(j,k)-akm(j,k)*vv1(j,k)
             akm(j,k)=0.0d+00

@@ -31,14 +31,16 @@
         do k=k2,n2
             if(k.ge.kb.and.k.lt.ke) then
                 call trdgmj(j1,jb,k,nj,nk,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt)
-                call trdgmj(je,m1,k,nj,nk,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt)
+                call trdgmj(je-1,m1,k,nj,nk,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt)
             else
                 call trdgmj(j1,m1,k,nj,nk,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt)
             end if
         enddo
+         call residup(j2,k2,m2,n2,jb,je,kb,ke,nj,nk,ressum,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt,res)
+!        write(*,200) ressum
 !c--------------------------------c
         do j=j2,m2
-            if(j.ge.jb.and.j.le.je) then
+            if(j.ge.jb.and.j.lt.je) then
                 call trdgmk(k1,kb,j,nj,nk,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt)
                 call trdgmk(ke-1,n1,j,nj,nk,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt)
             else
@@ -123,7 +125,7 @@
         include  'table.dmw'
         dimension ff(nj,nk),res(nj,nk)
         dimension app(nj,nk),bpp(nj,nk),aiw(nj,nk),aie(nj,nk),ajs(nj,nk),ajn(nj,nk),akb(nj,nk),akt(nj,nk)
-        dimension bj(njw),bk(nkw),fw(njw,nkw)
+        dimension bj(njw),bk(nkw),fw(njw,nkw),p(nj),q(nj)
 !c--------------------------------c
         j2=j1+1
         k2=k1+1
@@ -144,40 +146,58 @@
             enddo
         enddo
         do k=2,3
-                call trdgmj(j1,m1,k,nj,nk,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt)
+                j3=j2+1
+                m3=m2-1
+                denom=1.0d+00/app(j2,k)
+                p(j2)=ajn(j2,k)*denom
+                temp=bpp(j2,k)+akb(j2,k)*ff(j2,k-1)+akt(j2,k)*ff(j2,k+1)
+                q(j2)=temp*denom
+                do j=j3,m2
+                denom=1.0d+00/(app(j,k)-p(j-1)*ajs(j,k))
+                p(j)=ajn(j,k)*denom
+                temp=bpp(j,k)+akb(j,k)*ff(j,k-1)+akt(j,k)*ff(j,k+1)
+                q(j)=(temp+ajs(j,k)*q(j-1))*denom
+                enddo
+                ff(m2,k)=q(m2)
+                do j=m3,j2,-1
+                ff(j,k)=ff(j+1,k)*p(j)+q(j)
+                enddo
         enddo
-        do j=j2,jb
+
+        call residup(j2,k2,m2,n2,jb,je,kb,ke,nj,nk,ressum,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt,res)
+        !        write(*,11) ressum
+        do j=j2,m2
                 b2=bpp(j,2)+ajs(j,2)*ff(j-1,2)+ajn(j,2)*ff(j+1,2)
                 b3=bpp(j,3)+ajs(j,3)*ff(j-1,3)+ajn(j,3)*ff(j+1,3)
                 d1=app(j,2)*app(j,3)-akt(j,2)*akb(j,3)
-                d2=app(j,2)*b3+akb(j,3)*b2
-                d3=app(j,3)*b2+akt(j,2)*b3
+                d2=app(j,3)*b2+akt(j,2)*b3
+                d3=app(j,2)*b3+akb(j,3)*b2
                 ff(j,2)=d2/d1
                 ff(j,3)=d3/d1
         enddo
+        call residup(j2,k2,m2,n2,jb,je,kb,ke,nj,nk,ressum,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt,res)
+!        write(*,11) ressum
         
-        do j=je,m2
-                b2=bpp(j,2)+ajs(j,2)*ff(j-1,2)+ajn(j,2)*ff(j+1,2)
-                b3=bpp(j,3)+ajs(j,3)*ff(j-1,3)+ajn(j,3)*ff(j+1,3)
-                d1=app(j,2)*app(j,3)-akt(j,2)*akb(j,3)
-                d2=app(j,2)*b3+akb(j,3)*b2
-                d3=app(j,3)*b2+akt(j,2)*b3
-                ff(j,2)=d2/d1
-                ff(j,3)=d3/d1
-        enddo
 !c--------------------------------c
 
 !c--------------------------------c
-154     call residup(j2,k2,m2,n2,jb,je,kb,ke,nj,nk,ressum,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt,res)
+    ! call residup(j2,k2,m2,n2,jb,je,kb,ke,nj,nk,ressum,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt,res)
+154        ressum=0.0d+00
+        do j=j2,m2
+        do k=2,3
+        res(j,k)=bpp(j,k)-app(j,k)*ff(j,k)+ajs(j,k)*ff(j-1,k)+ajn(j,k)*ff(j+1,k)+ &
+                 akb(j,k)*ff(j,k-1)+akt(j,k)*ff(j,k+1)
+        ressum=ressum+dabs(res(j,k))
+        enddo
+        enddo
 !        write(*,200) ressum
 
         if(ressum.ge.ressum1) then
-        do 160 j=j2,m2
-        do 160 k=k2,n2
-        if((j.ge.jb.and.j.lt.je).and.(k.ge.kb.and.k.lt.ke)) goto 160
+        do j=j2,m2
+        do k=k2,n2
         ff(j,k)=fw(j,k)
-160     continue
-!        write(*,201)
+        enddo
+        enddo
         goto 1000
         end if
 
@@ -246,7 +266,7 @@
         dimension app(nj,nk),bpp(nj,nk),aiw(nj,nk),aie(nj,nk),ajs(nj,nk),ajn(nj,nk),akb(nj,nk),akt(nj,nk)
         dimension ff(nj,nk),res(nj,nk)
         dimension p(nj),q(nj)
-        dimension v_app0(nj,3),v_bpp0(nj,3),v_aiw0(nj,3),v_aie0(nj,3),v_ajs0(nj,3),v_ajn0(nj,3),v_akb0(nj,3),v_akt0(nj,3)
+        dimension v_app0(nj,3),v_bpp0(nj,3),v_aiw0(nj,3),v_aie0(nj,3),v_ajs0(nj,3),v_ajn0(nj,3),v_akb0(nj,3),v_akt0(nj,3),res2(nj,3)
         dimension v_ff0(nj,3)
 !c--------------------------------c
         j2=j1+1
@@ -254,12 +274,12 @@
         m2=m1-1
         n2=n1-1
         mode1=3
-100        call residup(j2,k2,m2,n2,jb,je,kb,ke,nj,nk,ressum0,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt,res)
-!        write(*,11) ressum0
+        call residup(j2,k2,m2,n2,jb,je,kb,ke,nj,nk,ressum0,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt,res)
+        write(*,11) ressum0
 11      format(' *','  l-1   ','initial residual ressum=',1pe10.3,8x,'*')
 !c--------------------------------c
-        call v_solve0(j1,k1,m1,n1,jb,je,kb,ke,ni,nj,nk,mode1,eps1,eps2,eps3,eps4,ressum,ff,res,app,bpp,aiw,aie,ajs,ajn,akb,akt)
-!        write(*,12) ressum
+100     call v_solve0(j1,k1,m1,n1,1000,je,kb,ke,ni,nj,nk,mode1,eps1,eps2,eps3,eps4,ressum,ff,res,app,bpp,aiw,aie,ajs,ajn,akb,akt)
+       write(*,12) ressum
 12      format(' *','  l-1   ','postLBL residual ressum=',1pe10.3,8x,'*')
         mode=1
 !c mode=1: control residual precision
@@ -269,7 +289,7 @@
         goto 1000
         else
 !        write(*,202)
-        goto 200
+        goto 1000
         end if
         end if
 
@@ -300,6 +320,7 @@
         p=0.0d+00
         q=0.0d+00
         v_ff0=0.0d+00
+        res2=0.0d+00
         do j=j2,m2
                 v_app0(j,2)=app(j,2)+app(j,3)-akt(j,2)-akb(j,3)
                 v_ajs0(j,2)=ajs(j,2)+ajs(j,3)
@@ -328,14 +349,16 @@
         v_ff0(j,2)=v_ff0(j+1,2)*p(j)+q(j)
         enddo
 
-        call residup(j2,k2,m2,n2,jb,je,kb,ke,nj,nk,ressum0,v_ff0,v_app0,v_bpp0,v_aiw0,v_aie0,v_ajs0,v_ajn0,v_akb0,v_akt0,res)
-!        write(*,11) ressum0
+        call residup(j2,k2,m2,n2,jb,je,kb,ke,nj,nk,ressum2,v_ff0,v_app0,v_bpp0,v_aiw0,v_aie0,v_ajs0,v_ajn0,v_akb0,v_akt0,res2)
+!        write(*,11) ressum2
         do j=j2,m2
         ff(j,2)=ff(j,2)+v_ff0(j,2)
-        ff(j,3)=ff(j,3)+v_ff0(j,2)
+        ff(j,3)=ff(j,3)+v_ff0(j,2)      
         enddo
         
-        goto 1000
+        call residup(j2,k2,m2,n2,jb,je,kb,ke,nj,nk,ressum1,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt,res)
+!        write(*,11) ressum1        
+        goto 100
 201     format(' *        total residual satisfied,   return        *')
 202     format(' *        residual not satisfied, continuing        *')
 203     format(' *        declev not reached,decrat exceeded        *')
@@ -343,74 +366,6 @@
 1000    return
         end
 
-
-!!c================================c
-!        subroutine v_solve1(j1,k1,m1,n1,jb,je,kb,ke,ni,nj,nk,mode,eps1,eps2,eps3,eps4,ressum0,ressum,&
-!                          ff,res,app,bpp,aiw,aie,ajs,ajn,akb,akt)
-!!c================================c
-!        include  'table.prc'
-!        include  'table.v_gd2'
-!        dimension app(nj,nk),bpp(nj,nk),aiw(nj,nk),aie(nj,nk),ajs(nj,nk),ajn(nj,nk),akb(nj,nk),akt(nj,nk)
-!        dimension ff(nj,nk),res(nj,nk)
-!!c--------------------------------c
-!        j2=j1+1
-!        k2=k1+1
-!        m2=m1-1
-!        n2=n1-1
-!        mode1=3
-!        call residup(j2,k2,m2,n2,jb,je,kb,ke,nj,nk,ressum0,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt,res)
-!!        write(*,11) ressum0
-!11      format(' *','  l-11   ','initial residual ressum=',1pe10.3,8x,'*')
-!!c--------------------------------c
-!100     call v_solve0(j1,k1,m1,n1,jb,je,kb,ke,ni,nj,nk,mode1,eps1,eps2,eps3,eps4,ressum,ff,res,app,bpp,aiw,aie,ajs,ajn,akb,akt)
-!!        write(*,12) ressum
-!12      format(' *','  l-11   ','postLBL residual ressum=',1pe10.3,8x,'*')
-!
-!!c mode=1: control residual precision
-!        if(mode.eq.1) then
-!        if(ressum.le.eps2) then
-!!        write(*,201)
-!        goto 1000
-!        else
-!!        write(*,202)
-!        goto 200
-!        end if
-!        end if
-!
-!!c mode=2: control residual decreasing level
-!        if(mode.eq.2) then
-!        if(ressum.le.eps2) then
-!!        write(*,201)
-!        goto 1000
-!        end if
-!        declev=ressum/ressum0
-!        if(declev.gt.eps3) then
-!!        write(*,203)
-!        goto 200
-!        else
-!!        write(*,204)
-!        goto 1000
-!        end if
-!        end if
-!
-!200     j12=2
-!        k12=1
-!        j22=j12+1
-!        k22=k12+1
-!        m22=m12-1
-!        n22=n12-1
-!        call v_amgcoi(nj,nk,nj11,nk11,j22,k22,m22,n22,jb2,je2,kb2,ke2,app,res,aiw,aie,ajs,ajn,akb,akt,v_app2,v_bpp2, &
-!                    v_aiw2,v_aie2,v_ajs2,v_ajn2,v_akb2,v_akt2)
-!        call v_solve11(j12,k12,m12,n12,jb2,je2,kb2,ke2,ni2,nj11,nk11,mode2,eps12,eps22,eps32,eps42,ressum20,ressum2, &
-!                    v_ff11,v_res2,v_app2,v_bpp2,v_aiw2,v_aie2,v_ajs2,v_ajn2,v_akb2,v_akt2)
-!        call v_amgcri(nj,nk,nj2,nk2,j22,k22,m22,n22,jb2,je2,kb2,ke2,ff,v_ff11)
-!        goto 100
-!201     format(' *        total residual satisfied,   return        *')
-!202     format(' *        residual not satisfied, continuing        *')
-!203     format(' *        declev not reached,decrat exceeded        *')
-!204     format(' *        declev satisfied,  go out of L-B-L        *')
-!1000    return
-!        end
 
 !c================================c
         subroutine v_solve2(j1,k1,m1,n1,jb,je,kb,ke,ni,nj,nk,mode,eps1,eps2,eps3,eps4,ressum0,ressum, &
@@ -472,7 +427,7 @@
                     v_app2,v_bpp2,v_aiw2,v_aie2,v_ajs2,v_ajn2,v_akb2,v_akt2)
         call v_solve1(j12,k12,m12,n12,jb2,je2,kb2,ke2,ni2,nj2,nk2,mode2,eps12,eps22,eps32,eps42,ressum02,ressum2, &
                     v_ff2,v_res2,v_app2,v_bpp2,v_aiw2,v_aie2,v_ajs2,v_ajn2,v_akb2,v_akt2)
-        call v_amgcri(nj,nk,nj2,nk2,j22,k22,m22,n22,jb2,je2,kb2,ke2,ff,v_ff2)
+        call v_amgcri_2_to_4(nj,nk,nj2,nk2,j22,k22,m22,n22,jb2,je2,kb2,ke2,ff,v_ff2)
         goto 100
 201     format(' *        total residual satisfied,   return        *')
 202     format(' *        residual not satisfied, continuing        *')
@@ -990,19 +945,21 @@
         dimension v_app1(nj1,nk1),v_res1(nj1,nk1),v_aiw1(nj1,nk1),v_aie1(nj1,nk1),v_ajs1(nj1,nk1),v_ajn1(nj1,nk1), &
                   v_akb1(nj1,nk1),v_akt1(nj1,nk1)
         dimension v_app2(nj2,nk2),v_bpp2(nj2,nk2),v_aiw2(nj2,nk2),v_aie2(nj2,nk2),v_ajs2(nj2,nk2),v_ajn2(nj2,nk2), &
-                  v_akb2(nj2,nk2),v_akt2(nj2,nk2)
+                  v_akb2(nj2,nk2),v_akt2(nj2,nk2),delta(nj2,nk2)
 !c-------------------------------c
+        delta=0.0
         do 100 j=j22,m22
         do 100 k=k22,n22
         if((j.ge.jb2.and.j.lt.je2).and.(k.ge.kb2.and.k.lt.ke2)) goto 100
-        v_app2(j,k)=v_app1(j,2*k-1)+v_app1(j,2*k-2)-v_akb1(j,2*k-1)-v_akt1(j,2*k-2)
         v_aiw2(j,k)=0
         v_aie2(j,k)=0
         v_ajs2(j,k)=v_ajs1(j,2*k-2)+v_ajs1(j,2*k-1)
         v_ajn2(j,k)=v_ajn1(j,2*k-2)+v_ajn1(j,2*k-1)
         v_akb2(j,k)=v_akb1(j,2*k-2)
         v_akt2(j,k)=v_akt1(j,2*k-1)
-
+        v_app2(j,k)=v_app1(j,2*k-1)+v_app1(j,2*k-2)-v_akb1(j,2*k-1)-v_akt1(j,2*k-2)
+                
+        delta(j,k)= v_app2(j,k)-v_ajs2(j,k)-v_ajn2(j,k)-v_akb2(j,k)- v_akt2(j,k)
         v_bpp2(j,k)=v_res1(j,2*k-2)+v_res1(j,2*k-1)
 100     continue
         return
@@ -1020,5 +977,26 @@
         ff1(j,2*k-2)=ff1(j,2*k-2)+ff2(j,k)
         ff1(j,2*k-1)=ff1(j,2*k-1)+ff2(j,k)
 100     continue
+        return
+        end
+
+!c===============================c
+        subroutine v_amgcri_2_to_4(nj1,nk1,nj2,nk2,j22,k22,m22,n22,jb2,je2,kb2,ke2,ff1,ff2)
+!c===============================c
+        include  'table.prc'
+        dimension ff1(nj1,nk1),ff2(nj2,nk2)
+!c-------------------------------c
+        do j=j22,m22
+                ff1(j,2)=ff1(j,2)+ff2(j,2)
+                ff1(j,5)=ff1(j,5)+ff2(j,3)
+        enddo 
+        do j=j22,jb2-1
+                ff1(j,3)=ff1(j,3)+ff2(j,2)
+                ff1(j,4)=ff1(j,4)+ff2(j,3) 
+        enddo
+        do j=je2,m22
+                ff1(j,3)=ff1(j,3)+ff2(j,2)
+                ff1(j,4)=ff1(j,4)+ff2(j,3) 
+        enddo
         return
         end
