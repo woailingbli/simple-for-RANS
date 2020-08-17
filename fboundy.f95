@@ -40,7 +40,7 @@
 !            app(j,k)=1.0
 !        enddo
 !c-------------------------------c
-        do j=jb,je
+        do j=jb,je-1
             k=ke
 !            j=j2
 !            app(j,k)=app(j,k)+ajm(j,k)
@@ -54,6 +54,12 @@
             app(j,k)=app(j,k)+akp(j,k)
             con(j,k)=con(j,k)-akp(j,k)*vv1(j,k)
             akp(j,k)=0.0d+00
+        enddo
+        
+        do j=jb,je-1
+           do k = kb,ke-1
+              app(j,k)=1.0d+00
+           enddo
         enddo
 !c-------------------------------c
         return

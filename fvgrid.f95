@@ -29,23 +29,13 @@
 
 !c--------------------------------c
         do k=k2,n2
-            if(k.ge.kb.and.k.lt.ke) then
-                call trdgmj(j1,jb,k,nj,nk,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt)
-                call trdgmj(je-1,m1,k,nj,nk,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt)
-            else
                 call trdgmj(j1,m1,k,nj,nk,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt)
-            end if
         enddo
          call residup(j2,k2,m2,n2,jb,je,kb,ke,nj,nk,ressum,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt,res)
 !        write(*,200) ressum
 !c--------------------------------c
         do j=j2,m2
-            if(j.ge.jb.and.j.lt.je) then
-                call trdgmk(k1,kb,j,nj,nk,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt)
-                call trdgmk(ke-1,n1,j,nj,nk,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt)
-            else
-                call trdgmk(k1,n1,j,nj,nk,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt)
-            end if
+            call trdgmk(k1,n1,j,nj,nk,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt)
         enddo
 !c--------------------------------c
 154     call residup(j2,k2,m2,n2,jb,je,kb,ke,nj,nk,ressum,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt,res)
@@ -57,7 +47,7 @@
         if((j.ge.jb.and.j.lt.je).and.(k.ge.kb.and.k.lt.ke)) goto 160
         ff(j,k)=fw(j,k)
 160     continue
-        write(*,201)
+!        write(*,201)
         goto 1000
         end if
 
@@ -275,11 +265,11 @@
         n2=n1-1
         mode1=3
         call residup(j2,k2,m2,n2,jb,je,kb,ke,nj,nk,ressum0,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt,res)
-        write(*,11) ressum0
+!        write(*,11) ressum0
 11      format(' *','  l-1   ','initial residual ressum=',1pe10.3,8x,'*')
 !c--------------------------------c
 100     call v_solve0(j1,k1,m1,n1,1000,je,kb,ke,ni,nj,nk,mode1,eps1,eps2,eps3,eps4,ressum,ff,res,app,bpp,aiw,aie,ajs,ajn,akb,akt)
-       write(*,12) ressum
+!       write(*,12) ressum
 12      format(' *','  l-1   ','postLBL residual ressum=',1pe10.3,8x,'*')
         mode=1
 !c mode=1: control residual precision
@@ -736,7 +726,7 @@
         mode1=3
         mode2=2
         call residup(j2,k2,m2,n2,jb,je,kb,ke,nj,nk,ressum0,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt,res)
-        write(*,11) ressum0
+!        write(*,11) ressum0
 11      format(' *','  l-7   ','initial residual ressum=',1pe10.3,8x,'*')
 !c--------------------------------c
 100     call v_solve0(j1,k1,m1,n1,jb,je,kb,ke,ni,nj,nk,mode1,eps1,eps2,eps3,eps4,ressum,ff,res,app,bpp,aiw,aie,ajs,ajn,akb,akt)
@@ -757,15 +747,15 @@
 !c mode=2: control residual decreasing level
         if(mode.eq.2) then
         if(ressum.le.eps2) then
-        write(*,201)
+!        write(*,201)
         goto 1000
         end if
         declev=ressum/ressum0
         if(declev.gt.eps3) then
-        write(*,203)
+!        write(*,203)
         goto 200
         else
-        write(*,204)
+!        write(*,204)
         goto 1000
         end if
         end if
@@ -807,7 +797,7 @@
         mode1=3
         mode2=2
         call residup(j2,k2,m2,n2,jb,je,kb,ke,nj,nk,ressum0,ff,app,bpp,aiw,aie,ajs,ajn,akb,akt,res)
-       write(*,11) ressum0
+!       write(*,11) ressum0
 11      format(' *','  l-8   ','initial residual ressum=',1pe10.3,8x,'*')
 !c--------------------------------c
 100     call v_solve0(j1,k1,m1,n1,jb,je,kb,ke,ni,nj,nk,mode1,eps1,eps2,eps3,eps4,ressum,ff,res,app,bpp,aiw,aie,ajs,ajn,akb,akt)
@@ -828,15 +818,15 @@
 !c mode=2: control residual decreasing level
         if(mode.eq.2) then
         if(ressum.le.eps2) then
-        write(*,201)
+!        write(*,201)
         goto 1000
         end if
         declev=ressum/ressum0
         if(declev.gt.eps3) then
-        write(*,203)
+!        write(*,203)
         goto 200
         else
-        write(*,204)
+!        write(*,204)
         goto 1000
         end if
         end if
@@ -950,7 +940,6 @@
         delta=0.0
         do 100 j=j22,m22
         do 100 k=k22,n22
-        if((j.ge.jb2.and.j.lt.je2).and.(k.ge.kb2.and.k.lt.ke2)) goto 100
         v_aiw2(j,k)=0
         v_aie2(j,k)=0
         v_ajs2(j,k)=v_ajs1(j,2*k-2)+v_ajs1(j,2*k-1)
@@ -973,7 +962,6 @@
 !c-------------------------------c
         do 100 j=j22,m22
         do 100 k=k22,n22
-        if((j.ge.jb2.and.j.lt.je2).and.(k.ge.kb2.and.k.lt.ke2)) goto 100
         ff1(j,2*k-2)=ff1(j,2*k-2)+ff2(j,k)
         ff1(j,2*k-1)=ff1(j,2*k-1)+ff2(j,k)
 100     continue

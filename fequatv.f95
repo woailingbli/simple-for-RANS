@@ -23,8 +23,8 @@
                        
                         Fn(j,k) = dzm1(k)*(vi1(j+1,k)+vi1(j,k))/2
                         Fs(j,k) = dzm1(k)*(vi1(j-1,k)+vi1(j,k))/2
-                        Ft(j,k) = dyv1(j)*(wi1(j,k+1)+wi1(j-1,k+1))/2
-                        Fb(j,k) = dyv1(j)*(wi1(j,k)+wi1(j-1,k))/2
+                        Ft(j,k) = dyv1(j)*(wi1(j,k+1)*fy21(j)+wi1(j-1,k+1)*fy11(j))
+                        Fb(j,k) = dyv1(j)*(wi1(j,k)*fy21(j)+wi1(j-1,k)*fy11(j)) 
                         
                         Dn(j,k) = dzm1(k)/(reno*dym1(j))
                         Ds(j,k) = dzm1(k)/(reno*dym1(j-1))
@@ -40,11 +40,16 @@
                         apc1(j,k) = ajs1(j,k) + ajn1(j,k) + akb1(j,k) + akt1(j,k)
                         
                         deltaA(j,k) = (ajs1(j,k)+ajn1(j,k)+akb1(j,k)+akt1(j,k))-apc1(j,k)
-                        vpwpt(j,k) = (vpwp(j-1,k+1)+vpwp(j,k+1))*fz21(k+1)*0.5 + (vpwp(j-1,k)+vpwp(j,k))*fz11(k+1)*0.5
-                        vpwpb(j,k) = (vpwp(j-1,k)+vpwp(j,k))*fz21(k)*0.5 + (vpwp(j-1,k-1)+vpwp(j,k-1))*fz11(k)*0.5
+                        vpwpt(j,k) = (vpwp(j-1,k)*fy11(j)+vpwp(j,k)*fy21(j))*fz11(k+1)+(vpwp(j-1,k+1)*fy11(j)+vpwp(j,k+1)*fy21(j))*fz21(k+1)
+                        
+                        vpwpb(j,k) = (vpwp(j-1,k-1)*fy11(j)+vpwp(j,k-1)*fy21(j))*fz11(k)+(vpwp(j-1,k)*fy11(j)+vpwp(j,k)*fy21(j))*fz21(k)
+
+                        if (k==n21.or.((k==kb1-1).and.(j.ge.jb1.and.j.lt.je1))) vpwpt(j,k)=0.0d+00
+                        if (k==k21.or.((k==ke1).and.(j.ge.jb1.and.j.lt.je1))) vpwpb(j,k)=0.0d+00
+                        
                         aiw1(j,k)=0
                         aie1(j,k)=0
-                        bpp1(j,k) = - (pre1(j,k)-pre1(j-1,k)) * dzm1(k)  
+                        bpp1(j,k) = - (pre1(j,k)-pre1(j-1,k)) * dzm1(k)  * 1.0d-4
                         bpp1(j,k) = bpp1(j,k) - (vpvp(j,k) - vpvp(j-1,k)) * dzm1(k) - (vpwpt(j,k) - vpwpb(j,k)) * dyv1(j)
             enddo
         enddo
@@ -91,98 +96,21 @@
                         vv1,res1,apc1,bpp1,aiw1,aie1,ajs1,ajn1,akb1,akt1)
         end if
 
+	open(91,file='..\output\RANS-vw\vv_simple_test.dat',form='formatted')
+	write(91,*) 'TITLE    ="Plot3D DataSet"'
+        write(91,*) 'VARIABLES = "y" "z" "v"'
+        write(91,*) 'DATASETAUXDATA Common.SpeedOfSound="1.0"'
+        write(91,*) 'DATASETAUXDATA Common.VectorVarsAreVelocity="FALSE"'
+        write(91,*) 'ZONE T="Zone-original grid"'
+        write(91,*) 'STRANDID=0, SOLUTIONTIME=0'
+        write(91,*) 'I=514, J=514, K=1, ZONETYPE=Ordered'
+        write(91,*) 'DATAPACKING=POINT'
+        write(91,*) 'DT=(SINGLE SINGLE SINGLE)'
+	do k=1,514
+	    do j=1,514
+                write(91,*) ym1(j),zm1(k),vv1(j,k)
+            enddo
+        enddo
+        close(91)
 1000    return
-!        call residum(j21,k21,m21,n21,jb1,je1+1,kb1,ke1,ni1,nj1,nk1,ressum0,vv1,apc1,bpp1,aiw1,aie1,ajs1,ajn1,akb1,akt1,res1)
-!        ressum1=ressum0
-!        write(*,200) ressum0
-!        iter=0
-!        mode=2
-!!c--------------------------------c
-!100     iter=iter+1
-!!c--------------------------------c
-!
-!!c--------------------------------c
-!        do k=k21,n21
-!            if(k.ge.kb1.and.k.lt.ke1) then
-!                call trdgmj(j11,jb1,k,nj1,nk1,vv1,apc1,bpp1,aiw1,aie1,ajs1,ajn1,akb1,akt1)
-!                call trdgmj(je1,m11,k,nj1,nk1,vv1,apc1,bpp1,aiw1,aie1,ajs1,ajn1,akb1,akt1)
-!            else
-!                call trdgmj(j11,m11,k,nj1,nk1,vv1,apc1,bpp1,aiw1,aie1,ajs1,ajn1,akb1,akt1)
-!            end if
-!        enddo
-!!c--------------------------------c
-!        do j=j21,m21
-!            if(j.ge.jb1.and.j.le.je1) then
-!                call trdgmk(k11,kb1,j,nj1,nk1,vv1,apc1,bpp1,aiw1,aie1,ajs1,ajn1,akb1,akt1)
-!                call trdgmk(ke1-1,n11,j,nj1,nk1,vv1,apc1,bpp1,aiw1,aie1,ajs1,ajn1,akb1,akt1)
-!            else
-!                call trdgmk(k11,n11,j,nj1,nk1,vv1,apc1,bpp1,aiw1,aie1,ajs1,ajn1,akb1,akt1)
-!            end if
-!        enddo
-!!c--------------------------------c
-!154     call residum(j21,k21,m21,n21,jb1,je1+1,kb1,ke1,ni1,nj1,nk1,ressum,vv1,apc1,bpp1,aiw1,aie1,ajs1,ajn1,akb1,akt1,res1)
-!        write(*,201) ressum
-!
-!        if(ressum.ge.ressum1) then
-!            write(*,202)
-!            goto 1000
-!        end if
-!
-!!c mode=1: control residual precision
-!        if(mode.eq.1) then
-!            if(ressum.le.epsm21) then
-!                write(*,203)
-!                goto 1000
-!            else
-!                ressum1=ressum
-!                write(*,204)
-!                goto 100
-!            end if
-!        end if
-!
-!!c mode=2: control residual decreasing level
-!        if(mode.eq.2) then
-!            if(ressum.le.epsm21) then
-!                write(*,203)
-!                goto 1000
-!            end if
-!            declev=ressum/ressum0
-!            if(declev.gt.epsm31) then
-!                ressum1=ressum
-!                write(*,205)
-!                goto 100
-!            else
-!                write(*,206)
-!                goto 1000
-!            end if
-!        end if
-!
-!!c mode=3: control residual decreasing rate
-!        if(mode.eq.3) then
-!            if(ressum.le.epsm21) then
-!                write(*,203)
-!                goto 1000
-!            end if
-!            decrat=ressum/ressum1
-!            if(decrat.le.epsm41) then
-!                ressum1=ressum
-!                write(*,207)
-!                goto 100
-!            else
-!                write(*,208)
-!                goto 1000
-!            end if
-!        end if
-!
-!200     format(' *',8x,'initial residual ressum=',1pe10.3,8x,'*')
-!201     format(' *',8x,'total  residual  ressum=',1pe10.3,8x,'*')
-!202     format(' *        residual not improving,     return        *')
-!203     format(' *        total residual satisfied,   return        *')
-!204     format(' *        residual not satisfied, continuing        *')
-!205     format(' *        declev not satisfied,   continuing        *')
-!206     format(' *        declev satisfied,  go out of L-B-L        *')
-!207     format(' *        decrat small, go on next iteration        *')
-!208     format(' *        decrat large, stop the LBL process        *')
-!
-!1000    return
-        end
+end
