@@ -1,14 +1,13 @@
-!c----------------------------------------------------------------------c
+c======================================c
+c       controlling parameters         c
+c======================================c
         parameter(ioc=10)
-        character*100 dt0fmt,dt0ufm,dt1fmt,dt1ufm,datff0
-        common/cwl/mdwall
-        common/cms/mdschm
-        common/cgl/levgrd
-        common/ccr/strh,reno
-        common/cpg/prx,pry,prz
-        common/cti/dt,eptm,layt
-        common/crf/ir1,jr1,kr1,ir2,jr2,kr2
-        common/cpr/modeui,modevi,modewi,modepr
-        common/cip/dt0fmt,dt0ufm,dt1fmt,dt1ufm,datff0
-        common/moni/cfl_max,vcen,wcen
-!c----------------------------------------------------------------------c
+        common/cgl/levmgd
+        common/ccr/strh,reno,prtl,eckt,dt
+        common/cav/ulav,vlav,wlav,tlav
+        common/ctu/csty,cnos,cwvn
+        common/can/ymb,yme,zmb,zme
+        common/cpr/modeui,modevi,modewi,modeti
+        common/cbd/ubo,vbo,wbo,tbo,ubi,vbi,wbi,tbi
+        common/cgs/xl,yl,zl,x0,y0,z0,jmd1,kmd1,jmd2,kmd2,cs1,cs2
+c======================================c

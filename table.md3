@@ -1,0 +1,12 @@
+c----------------------------------------------------------------------c
+        module mdumtg
+        implicit double precision (a-h,o-z)
+        allocatable :: ym2(:),yv2(:),zm2(:),zw2(:) 
+        allocatable :: ym3(:),yv3(:),zm3(:),zw3(:) 
+        allocatable :: ym4(:),yv4(:),zm4(:),zw4(:) 
+        allocatable :: ym5(:),yv5(:),zm5(:),zw5(:) 
+        allocatable :: ym6(:),yv6(:),zm6(:),zw6(:) 
+        allocatable :: ym7(:),yv7(:),zm7(:),zw7(:) 
+        allocatable :: ym8(:),yv8(:),zm8(:),zw8(:) 
+        end module mdumtg
+c----------------------------------------------------------------------c

@@ -1,0 +1,9 @@
+c----------------------------------------------------------------------c
+        module mduwrk
+        real*8,dimension(:),allocatable :: frx1,fix1,frx2,fix2
+        real*8,dimension(:),allocatable :: fry1,fiy1,fry2,fiy2
+        real*8,dimension(:),allocatable :: frz1,fiz1,frz2,fiz2
+        real*8,dimension(:),allocatable :: pj,qj,pk,qk
+        real*8,dimension(:,:),allocatable :: fw,wk,wk1,wk2
+        end module mduwrk
+c----------------------------------------------------------------------c

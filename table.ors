@@ -1,0 +1,14 @@
+c----------------------------------------------------------------------c
+c------------------------c
+c       table.orrs       c
+c------------------------c
+        parameter(ne=1001)
+        common/p1/ib,ie,co,dl,dh,a1,a2,al,re,cr,ci
+        common/p2/fu0(ne),fv0(ne),fuvx(ne),fuvy(ne)
+        common/p3/a(ne,5),b(ne),ar(ne,5),ai(ne,5),des,dex
+        common/p4/yb(ne),fr(ne),fi(ne),fr1(ne),fi1(ne),fr2(ne),fi2(ne)
+        common/p5/e1,e2,step0,mm,mi
+c-------------------------------c
+c       end of table.orrs       c
+c-------------------------------c
+c----------------------------------------------------------------------c

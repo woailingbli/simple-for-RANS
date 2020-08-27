@@ -1,0 +1,11 @@
+c----------------------------------------------------------------------c
+        module mduvar
+        real*8,dimension(:,:,:),allocatable :: 
+     *  ui,vi,wi,ti,ulm,vlm,wlm,tlm
+        real*8,dimension(:,:),allocatable :: 
+     *  ui1,vi1,wi1,pi1,vpvp,vpwp,wpwp,vv1,ww1,pre1,apc1,apc2
+        real*8,dimension(:,:),allocatable :: 
+     *  um,vm,wm,pm,upvp,upwp
+        real*8,dimension(:,:),allocatable :: disp
+        end module mduvar
+c----------------------------------------------------------------------c

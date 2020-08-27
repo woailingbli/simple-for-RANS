@@ -1,0 +1,11 @@
+c----------------------------------------------------------------------c
+        module mdupnt
+        integer,dimension(:,:),pointer :: ibpm0
+        real*8, dimension(:,:),pointer :: 
+     *  ffm0,appm0,bppm0,resm0,ajsm0,akbm0,ajnm0,aktm0
+
+        integer,dimension(:,:),pointer :: ibpml
+        real*8, dimension(:,:),pointer :: 
+     *  ffml,appml,bppml,resml,ajsml,akbml,ajnml,aktml
+        end module mdupnt
+c----------------------------------------------------------------------c

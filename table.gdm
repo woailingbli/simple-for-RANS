@@ -1,0 +1,14 @@
+c----------------------------------------------------------------------c
+        parameter(maxmgd=19)
+        common/cgn2/
+     *  j1m(0:maxmgd),m1m(0:maxmgd),k1m(0:maxmgd),n1m(0:maxmgd),
+     *  j1mv(0:maxmgd),m1mv(0:maxmgd),k1mv(0:maxmgd),n1mv(0:maxmgd),
+     *  j1mw(0:maxmgd),m1mw(0:maxmgd),k1mw(0:maxmgd),n1mw(0:maxmgd)
+        common/cgn3/
+     *  jbm(0:maxmgd),jem(0:maxmgd),kbm(0:maxmgd),kem(0:maxmgd),
+     *  jbmv(0:maxmgd),jemv(0:maxmgd),kbmv(0:maxmgd),kemv(0:maxmgd),
+     *  jbmw(0:maxmgd),jemw(0:maxmgd),kbmw(0:maxmgd),kemw(0:maxmgd)
+        common/cres/ressum0(0:maxmgd),ressum1(0:maxmgd)
+        common/ceps/epsm1,epsm2,epsm3,epsm4,
+     *  epsp1(0:maxmgd),epsp2(0:maxmgd),epsp3(0:maxmgd),epsp4(0:maxmgd)
+c----------------------------------------------------------------------c

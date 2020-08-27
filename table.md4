@@ -1,0 +1,51 @@
+c----------------------------------------------------------------------c
+        module mdumgv
+        integer,dimension(:,:),allocatable,target :: 
+     *  ibp0,ibp1,ibp2,ibp3,ibp4,ibp5,ibp6,ibp7,ibp8,ibp9,
+     *  ibp0_v,ibp1_v,ibp2_v,ibp3_v,ibp4_v,ibp5_v,ibp6_v,
+     *  ibp7_v,ibp8_v,ibp9_v,
+     *  ibp0_w,ibp1_w,ibp2_w,ibp3_w,ibp4_w,ibp5_w,ibp6_w,
+     *  ibp7_w,ibp8_w,ibp9_w
+        real*8,dimension(:,:),allocatable,target ::  
+     *  ff0,app0,res0,ajs0,akb0,ajn0,akt0,
+     *  ff1,app1,res1,ajs1,akb1,ajn1,akt1,
+     *  ff2,app2,res2,ajs2,akb2,ajn2,akt2,
+     *  ff3,app3,res3,ajs3,akb3,ajn3,akt3,
+     *  ff4,app4,res4,ajs4,akb4,ajn4,akt4,
+     *  ff5,app5,res5,ajs5,akb5,ajn5,akt5,
+     *  ff6,app6,res6,ajs6,akb6,ajn6,akt6,
+     *  ff7,app7,res7,ajs7,akb7,ajn7,akt7,
+     *  ff8,app8,res8,ajs8,akb8,ajn8,akt8,
+     *  ff9,app9,res9,ajs9,akb9,ajn9,akt9,
+     *  ff0_v,app0_v,res0_v,ajs0_v,akb0_v,ajn0_v,akt0_v,
+     *  ff1_v,app1_v,res1_v,ajs1_v,akb1_v,ajn1_v,akt1_v,
+     *  ff2_v,app2_v,res2_v,ajs2_v,akb2_v,ajn2_v,akt2_v,
+     *  ff3_v,app3_v,res3_v,ajs3_v,akb3_v,ajn3_v,akt3_v,
+     *  ff4_v,app4_v,res4_v,ajs4_v,akb4_v,ajn4_v,akt4_v,
+     *  ff5_v,app5_v,res5_v,ajs5_v,akb5_v,ajn5_v,akt5_v,
+     *  ff6_v,app6_v,res6_v,ajs6_v,akb6_v,ajn6_v,akt6_v,
+     *  ff7_v,app7_v,res7_v,ajs7_v,akb7_v,ajn7_v,akt7_v,
+     *  ff8_v,app8_v,res8_v,ajs8_v,akb8_v,ajn8_v,akt8_v,
+     *  ff9_v,app9_v,res9_v,ajs9_v,akb9_v,ajn9_v,akt9_v,
+     *  ff0_w,app0_w,res0_w,ajs0_w,akb0_w,ajn0_w,akt0_w,
+     *  ff1_w,app1_w,res1_w,ajs1_w,akb1_w,ajn1_w,akt1_w,
+     *  ff2_w,app2_w,res2_w,ajs2_w,akb2_w,ajn2_w,akt2_w,
+     *  ff3_w,app3_w,res3_w,ajs3_w,akb3_w,ajn3_w,akt3_w,
+     *  ff4_w,app4_w,res4_w,ajs4_w,akb4_w,ajn4_w,akt4_w,
+     *  ff5_w,app5_w,res5_w,ajs5_w,akb5_w,ajn5_w,akt5_w,
+     *  ff6_w,app6_w,res6_w,ajs6_w,akb6_w,ajn6_w,akt6_w,
+     *  ff7_w,app7_w,res7_w,ajs7_w,akb7_w,ajn7_w,akt7_w,
+     *  ff8_w,app8_w,res8_w,ajs8_w,akb8_w,ajn8_w,akt8_w,
+     *  ff9_w,app9_w,res9_w,ajs9_w,akb9_w,ajn9_w,akt9_w
+        real*8,dimension(:,:),allocatable,target ::  
+     *  bpp0,bpp1,bpp2,bpp3,bpp4,bpp5,bpp6,bpp7,bpp8,bpp9,
+     *  bpp0_v,bpp1_v,bpp2_v,bpp3_v,bpp4_v,bpp5_v,bpp6_v,
+     *  bpp7_v,bpp8_v,bpp9_v,
+     *  bpp0_w,bpp1_w,bpp2_w,bpp3_w,bpp4_w,bpp5_w,bpp6_w,
+     *  bpp7_w,bpp8_w,bpp9_w
+        integer,dimension(:),allocatable :: ma,mv
+        real*8 ,dimension(:),allocatable :: a,b,z,v 
+        real*8,dimension(:,:),allocatable :: delta
+
+        end module mdumgv
+c----------------------------------------------------------------------c

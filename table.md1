@@ -1,0 +1,8 @@
+c----------------------------------------------------------------------c
+        module mdugrd
+        integer,dimension(:,:),allocatable::ibp,ibu,ibv,ibw
+        real*8,dimension(:),allocatable::xm1,xu1,dxm,dxu,fx1,fx2
+        real*8,dimension(:),allocatable::ym1,yv1,dym,dyv,fy1,fy2
+        real*8,dimension(:),allocatable::zm1,zw1,dzm,dzw,fz1,fz2
+        end module mdugrd
+c----------------------------------------------------------------------c
